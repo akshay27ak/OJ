@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Build all language containers
+  python-runner:
+    build:
+      context: ./python
+      dockerfile: Dockerfile
+    image: oj-python:3.9
+    command: ["echo", "Python container built"]
+
+  javascript-runner:
+    build:
+      context: ./javascript
+      dockerfile: Dockerfile
+    image: oj-javascript:18
+    command: ["echo", "JavaScript container built"]
+
+  cpp-runner:
+    build:
+      context: ./cpp
+      dockerfile: Dockerfile
+    image: oj-cpp:9
+    command: ["echo", "C++ container built"]
+
+  java-runner:
+    build:
+      context: ./java
+      dockerfile: Dockerfile
+    image: oj-java:11
+    command: ["echo", "Java container built"]
+
+  c-runner:
+    build:
+      context: ./c
+      dockerfile: Dockerfile
+    image: oj-c:9
+    command: ["echo", "C container built"]

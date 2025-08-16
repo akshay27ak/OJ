@@ -1,0 +1,30 @@
+{
+  "name": "online-judge-compiler",
+  "version": "1.0.0",
+  "description": "Code execution service for Online Judge",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest",
+    "build-containers": "bash scripts/build-containers.sh",
+    "test-containers": "bash scripts/test-containers.sh"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "bull": "^4.12.2",
+    "redis": "^4.6.13",
+    "fs-extra": "^11.2.0",
+    "uuid": "^9.0.1",
+    "child_process": "^1.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3",
+    "jest": "^29.7.0"
+  },
+  "keywords": ["online-judge", "compiler", "code-execution", "docker", "redis", "queue"],
+  "author": "Your Name",
+  "license": "MIT"
+}

@@ -1,59 +1,64 @@
-const express = require("express");
-const app = express();
-const { DBConnection } = require("./database/db");
-const User = require("./models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const express = require("express")
+const cors = require("cors")
+const { DBConnection } = require("./database/db")
 
-DBConnection();
+// Import routes
+const authRoutes = require("./routes/auth")
+const problemRoutes = require("./routes/problems")
+const submissionRoutes = require("./routes/submissions")
+const adminRoutes = require("./routes/admin")
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const app = express()
 
+// Database connection
+DBConnection()
+
+// Middleware
+app.use(cors())
+app.use(express.json({ limit: "10mb" }))
+app.use(express.urlencoded({ extended: true, limit: "10mb" }))
+
+// Routes
 app.get("/", (req, res) => {
-  res.send("Hello to index");
-});
+  res.json({
+    message: "Online Judge API Server",
+    version: "1.0.0",
+    endpoints: {
+      auth: "/api/auth",
+      problems: "/api/problems",
+      submissions: "/api/submissions",
+      admin: "/api/admin",
+    },
+  })
+})
 
-app.post("/register", async (req, res) => {
-  try {
-    // get all data from frontend
-    const { firstName, lastName, email, password } = req.body;
+// API Routes
+app.use("/api/auth", authRoutes)
+app.use("/api/problems", problemRoutes)
+app.use("/api/submissions", submissionRoutes)
+app.use("/api/admin", adminRoutes)
 
-    // check all the data should exists
-    if (!(firstName && lastName && email && password)) {
-      return res.status(400).send("Enter all details");
-    }
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Error:", err)
+  res.status(500).json({
+    success: false,
+    message: "Something went wrong!",
+    error: process.env.NODE_ENV === "development" ? err.message : undefined,
+  })
+})
 
-    // check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).send("User already exists with same email");
-    }
+// 404 handler
+app.use("*", (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+  })
+})
 
-    // hashing and encrypt password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // save user in db
-    const user = await User.create({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-    });
-
-    // generate a token for user and send it
-    const token = jwt.sign({ id: user._id, email }, process.env.SECRET_KEY, {
-      expiresIn: "1h",
-    });
-    user.token = token;
-    // user.password = undefined;
-    res.status(200).json({ message: "User registered successfully", user });
-
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server is listening on http://localhost:${process.env.PORT}`);
-});
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on http://localhost:${PORT}`)
+  console.log(`📚 API Documentation available at http://localhost:${PORT}`)
+  console.log(`🔧 Compiler service expected at ${process.env.COMPILER_SERVICE_URL || "http://localhost:3001"}`)
+})
