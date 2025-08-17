@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Backend API Service
+  backend:
+    build: ./Backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+    env_file:
+      - ./Backend/.env
+    depends_on:
+      - compiler
+    networks:
+      - oj-network
+
+  # Online Compiler Service  
+  compiler:
+    build: ./compiler-service
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+    env_file:
+      - ./compiler-service/.env
+    volumes:
+      - /tmp:/tmp  # For temporary code execution files
+    networks:
+      - oj-network
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - DAC_OVERRIDE
+
+  # Frontend Service
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - VITE_API_URL=http://localhost:5000
+  #     - VITE_COMPILER_URL=http://localhost:8000
+  #   depends_on:
+  #     - backend
+  #     - compiler
+  #   networks:
+  #     - oj-network
+
+networks:
+  oj-network:
+    driver: bridge

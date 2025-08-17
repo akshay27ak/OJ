@@ -1,48 +1,26 @@
-const jwt = require("jsonwebtoken")
-const User = require("../models/User")
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-const authenticateToken = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
-    const authHeader = req.headers["authorization"]
-    const token = authHeader && authHeader.split(" ")[1] // Bearer TOKEN
+    const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "Access token required",
-      })
+      return res.status(401).send("Access denied. Token missing.");
     }
 
-    const decoded = jwt.verify(token, process.env.SECRET_KEY)
-    const user = await User.findById(decoded.id).select("-password")
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const user = await User.findById(decoded.id);
 
     if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid token - user not found",
-      })
+      return res.status(401).send("Invalid token.");
     }
 
-    req.user = user
-    next()
-  } catch (error) {
-    console.error("Auth middleware error:", error)
-    return res.status(403).json({
-      success: false,
-      message: "Invalid or expired token",
-    })
+    req.user = user;
+    next();
+  } catch (err) {
+    res.status(401).send("Invalid or expired token.");
   }
-}
+};
 
-const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
-    next()
-  } else {
-    return res.status(403).json({
-      success: false,
-      message: "Admin access required",
-    })
-  }
-}
-
-module.exports = { authenticateToken, isAdmin }
+module.exports = authMiddleware;
