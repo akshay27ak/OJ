@@ -1,15 +1,15 @@
-const express = require("express");
-const router = express.Router();
-const Problem = require("../models/Problem");
-const authMiddleware = require("../middleware/auth");
+const express = require("express")
+const router = express.Router()
+const Problem = require("../models/Problem")
+const authMiddleware = require("../middleware/auth")
 
 // 🔹 Create Problem
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { title, statement, difficulty, testCases } = req.body;
+    const { title, statement, difficulty, testCases } = req.body
 
     if (!(title && statement && difficulty)) {
-      return res.status(400).json({ error: "Please fill all required fields" });
+      return res.status(400).json({ error: "Please fill all required fields" })
     }
 
     const problem = await Problem.create({
@@ -18,75 +18,82 @@ router.post("/", authMiddleware, async (req, res) => {
       difficulty,
       createdBy: req.user._id,
       testCases: testCases || [],
-    });
+    })
 
-    res.status(201).json(problem);
+    res.status(201).json(problem)
   } catch (err) {
-    console.error("Create Problem Error:", err);
-    res.status(500).json({ error: "Failed to create problem" });
+    console.error("Create Problem Error:", err)
+    res.status(500).json({ error: "Failed to create problem" })
   }
-});
+})
 
 // 🔹 Get All Problems
 router.get("/", async (req, res) => {
   try {
-    const problems = await Problem.find().populate("createdBy", "firstname lastname email");
-    res.json(problems);
+    const { createdBy } = req.query
+    const query = {}
+
+    if (createdBy) {
+      query.createdBy = createdBy
+    }
+
+    const problems = await Problem.find(query).populate("createdBy", "firstname lastname email")
+    res.json(problems)
   } catch (err) {
-    console.error("Fetch Problems Error:", err);
-    res.status(500).json({ error: "Failed to fetch problems" });
+    console.error("Fetch Problems Error:", err)
+    res.status(500).json({ error: "Failed to fetch problems" })
   }
-});
+})
 
 // 🔹 Get a Single Problem by ID
 router.get("/:id", async (req, res) => {
   try {
-    const problem = await Problem.findById(req.params.id).populate("createdBy", "firstname lastname email");
+    const problem = await Problem.findById(req.params.id).populate("createdBy", "firstname lastname email")
     if (!problem) {
-      return res.status(404).json({ error: "Problem not found" });
+      return res.status(404).json({ error: "Problem not found" })
     }
-    res.json(problem);
+    res.json(problem)
   } catch (err) {
-    console.error("Fetch Problem Error:", err);
-    res.status(500).json({ error: "Failed to fetch problem" });
+    console.error("Fetch Problem Error:", err)
+    res.status(500).json({ error: "Failed to fetch problem" })
   }
-});
+})
 
 // 🔹 Update Problem (only by creator)
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
-    const problem = await Problem.findById(req.params.id);
-    if (!problem) return res.status(404).send("Problem not found");
+    const problem = await Problem.findById(req.params.id)
+    if (!problem) return res.status(404).send("Problem not found")
 
     if (problem.createdBy.toString() !== req.user._id.toString()) {
-      return res.status(403).send("You can only update your own problems");
+      return res.status(403).send("You can only update your own problems")
     }
 
-    Object.assign(problem, req.body);
-    await problem.save();
-    res.json(problem);
+    Object.assign(problem, req.body)
+    await problem.save()
+    res.json(problem)
   } catch (err) {
-    console.error("Update Problem Error:", err);
-    res.status(500).json({ error: "Failed to update problem" });
+    console.error("Update Problem Error:", err)
+    res.status(500).json({ error: "Failed to update problem" })
   }
-});
+})
 
 // 🔹 Delete Problem (only by creator)
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
-    const problem = await Problem.findById(req.params.id);
-    if (!problem) return res.status(404).send("Problem not found");
+    const problem = await Problem.findById(req.params.id)
+    if (!problem) return res.status(404).send("Problem not found")
 
     if (problem.createdBy.toString() !== req.user._id.toString()) {
-      return res.status(403).send("You can only delete your own problems");
+      return res.status(403).send("You can only delete your own problems")
     }
 
-    await problem.deleteOne();
-    res.send("Problem deleted successfully");
+    await problem.deleteOne()
+    res.send("Problem deleted successfully")
   } catch (err) {
-    console.error("Delete Problem Error:", err);
-    res.status(500).json({ error: "Failed to delete problem" });
+    console.error("Delete Problem Error:", err)
+    res.status(500).json({ error: "Failed to delete problem" })
   }
-});
+})
 
-module.exports = router;
+module.exports = router

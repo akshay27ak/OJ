@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { Layout } from "@/components/Layout"
 import { ArrowLeft, Plus, Trash2, Save } from "lucide-react"
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL
@@ -86,141 +85,139 @@ export const CreateProblemPage = () => {
   }
 
   return (
-    <Layout>
-      <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Link to="/problems" className="flex items-center gap-2 text-muted-foreground hover:text-primary">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Problems
-          </Link>
-        </div>
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Link to="/problems" className="flex items-center gap-2 text-muted-foreground hover:text-primary">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Problems
+        </Link>
+      </div>
 
-        <div className="max-w-4xl mx-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">Create New Problem</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="md:col-span-2 space-y-2">
-                    <Label htmlFor="title">Problem Title</Label>
-                    <Input
-                      id="title"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      required
-                      placeholder="Enter problem title"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="difficulty">Difficulty</Label>
-                    <Select value={difficulty} onValueChange={setDifficulty}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Easy">Easy</SelectItem>
-                        <SelectItem value="Medium">Medium</SelectItem>
-                        <SelectItem value="Hard">Hard</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="statement">Problem Statement</Label>
-                  <Textarea
-                    id="statement"
-                    value={statement}
-                    onChange={(e) => setStatement(e.target.value)}
+      <div className="max-w-4xl mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl">Create New Problem</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2 space-y-2">
+                  <Label htmlFor="title">Problem Title</Label>
+                  <Input
+                    id="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     required
-                    className="min-h-[200px] resize-none"
-                    placeholder="Describe the problem, input format, output format, constraints, etc."
+                    placeholder="Enter problem title"
                   />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="difficulty">Difficulty</Label>
+                  <Select value={difficulty} onValueChange={setDifficulty}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Easy">Easy</SelectItem>
+                      <SelectItem value="Medium">Medium</SelectItem>
+                      <SelectItem value="Hard">Hard</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="statement">Problem Statement</Label>
+                <Textarea
+                  id="statement"
+                  value={statement}
+                  onChange={(e) => setStatement(e.target.value)}
+                  required
+                  className="min-h-[200px] resize-none"
+                  placeholder="Describe the problem, input format, output format, constraints, etc."
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-base font-semibold">Test Cases</Label>
+                    <p className="text-sm text-muted-foreground">
+                      The first test case will be visible to users as a sample
+                    </p>
+                  </div>
+                  <Button type="button" onClick={addTestCase} variant="outline" size="sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Test Case
+                  </Button>
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label className="text-base font-semibold">Test Cases</Label>
-                      <p className="text-sm text-muted-foreground">
-                        The first test case will be visible to users as a sample
-                      </p>
-                    </div>
-                    <Button type="button" onClick={addTestCase} variant="outline" size="sm">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Test Case
-                    </Button>
-                  </div>
-
-                  <div className="space-y-4">
-                    {testCases.map((testCase, index) => (
-                      <Card key={index} className="relative">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <CardTitle className="text-base">
-                              Test Case {index + 1}
-                              {index === 0 && (
-                                <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                                  Sample (Visible)
-                                </span>
-                              )}
-                            </CardTitle>
-                            {testCases.length > 1 && (
-                              <Button
-                                type="button"
-                                onClick={() => removeTestCase(index)}
-                                variant="ghost"
-                                size="sm"
-                                className="text-destructive hover:text-destructive"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
+                  {testCases.map((testCase, index) => (
+                    <Card key={index} className="relative">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-base">
+                            Test Case {index + 1}
+                            {index === 0 && (
+                              <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                                Sample (Visible)
+                              </span>
                             )}
-                          </div>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <div className="space-y-2">
-                            <Label>Input</Label>
-                            <Textarea
-                              value={testCase.input}
-                              onChange={(e) => handleTestCaseChange(index, "input", e.target.value)}
-                              placeholder="Enter test input"
-                              className="font-mono text-sm h-24 resize-none"
-                              required
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label>Expected Output</Label>
-                            <Textarea
-                              value={testCase.expectedOutput}
-                              onChange={(e) => handleTestCaseChange(index, "expectedOutput", e.target.value)}
-                              placeholder="Enter expected output"
-                              className="font-mono text-sm h-24 resize-none"
-                              required
-                            />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
+                          </CardTitle>
+                          {testCases.length > 1 && (
+                            <Button
+                              type="button"
+                              onClick={() => removeTestCase(index)}
+                              variant="ghost"
+                              size="sm"
+                              className="text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                          <Label>Input</Label>
+                          <Textarea
+                            value={testCase.input}
+                            onChange={(e) => handleTestCaseChange(index, "input", e.target.value)}
+                            placeholder="Enter test input"
+                            className="font-mono text-sm h-24 resize-none"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Expected Output</Label>
+                          <Textarea
+                            value={testCase.expectedOutput}
+                            onChange={(e) => handleTestCaseChange(index, "expectedOutput", e.target.value)}
+                            placeholder="Enter expected output"
+                            className="font-mono text-sm h-24 resize-none"
+                            required
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
+              </div>
 
-                <div className="flex gap-4 pt-4">
-                  <Button type="submit" disabled={isLoading} className="flex-1">
-                    <Save className="w-4 h-4 mr-2" />
-                    {isLoading ? "Creating Problem..." : "Create Problem"}
-                  </Button>
-                  <Button type="button" variant="outline" onClick={() => navigate("/problems")}>
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
+              <div className="flex gap-4 pt-4">
+                <Button type="submit" disabled={isLoading} className="flex-1">
+                  <Save className="w-4 h-4 mr-2" />
+                  {isLoading ? "Creating Problem..." : "Create Problem"}
+                </Button>
+                <Button type="button" variant="outline" onClick={() => navigate("/problems")}>
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
-    </Layout>
+    </div>
   )
 }

@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { CodeEditor } from "./CodeEditor"
-import { Layout } from "./Layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -108,107 +107,105 @@ export const CodePlayground = () => {
   }
 
   return (
-    <Layout>
-      <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Code Playground</h1>
-            <p className="text-muted-foreground">Write, test, and experiment with your code</p>
-          </div>
-          <div className="flex gap-2">
-            <Button onClick={saveCode} variant="outline" size="sm">
-              <Save className="w-4 h-4 mr-2" />
-              Save
-            </Button>
-            <Button onClick={shareCode} variant="outline" size="sm">
-              <Share className="w-4 h-4 mr-2" />
-              Share
-            </Button>
-            <Button variant="outline" size="sm">
-              <History className="w-4 h-4 mr-2" />
-              History
-            </Button>
-          </div>
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Code Playground</h1>
+          <p className="text-muted-foreground">Write, test, and experiment with your code</p>
         </div>
-
-        <div className="grid lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-3">
-            <CodeEditor
-              language={language}
-              onLanguageChange={setLanguage}
-              onCodeChange={setCode}
-              onRun={handleRun}
-              onAIReview={handleAIReview}
-              customInput={customInput}
-              onCustomInputChange={setCustomInput}
-              output={output}
-              aiReview={aiReview}
-              isRunning={isRunning}
-              isReviewing={isReviewing}
-              showSubmit={false}
-              className="h-[800px]"
-            />
-          </div>
-
-          <div className="space-y-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
-                  New File
-                </Button>
-                <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
-                  Load Template
-                </Button>
-                <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
-                  Format Code
-                </Button>
-                <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
-                  Clear Output
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Language Info</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Current:</span>
-                  <Badge variant="outline">{language === "cpp" ? "C++" : language === "py" ? "Python" : "Java"}</Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Extension:</span>
-                  <span className="text-sm font-mono">
-                    {language === "cpp" ? ".cpp" : language === "py" ? ".py" : ".java"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Lines:</span>
-                  <span className="text-sm">{code.split("\n").length}</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Tips</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="text-xs text-muted-foreground space-y-1">
-                  <li>• Use Tab for indentation</li>
-                  <li>• Ctrl+A to select all</li>
-                  <li>• Test with custom input</li>
-                  <li>• Use AI Review for feedback</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
+        <div className="flex gap-2">
+          <Button onClick={saveCode} variant="outline" size="sm">
+            <Save className="w-4 h-4 mr-2" />
+            Save
+          </Button>
+          <Button onClick={shareCode} variant="outline" size="sm">
+            <Share className="w-4 h-4 mr-2" />
+            Share
+          </Button>
+          <Button variant="outline" size="sm">
+            <History className="w-4 h-4 mr-2" />
+            History
+          </Button>
         </div>
       </div>
-    </Layout>
+
+      <div className="grid lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-3">
+          <CodeEditor
+            language={language}
+            onLanguageChange={setLanguage}
+            onCodeChange={setCode}
+            onRun={handleRun}
+            onAIReview={handleAIReview}
+            customInput={customInput}
+            onCustomInputChange={setCustomInput}
+            output={output}
+            aiReview={aiReview}
+            isRunning={isRunning}
+            isReviewing={isReviewing}
+            showSubmit={false}
+            className="h-[800px]"
+          />
+        </div>
+
+        <div className="space-y-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
+                New File
+              </Button>
+              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
+                Load Template
+              </Button>
+              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
+                Format Code
+              </Button>
+              <Button variant="outline" className="w-full justify-start bg-transparent" size="sm">
+                Clear Output
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Language Info</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Current:</span>
+                <Badge variant="outline">{language === "cpp" ? "C++" : language === "py" ? "Python" : "Java"}</Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Extension:</span>
+                <span className="text-sm font-mono">
+                  {language === "cpp" ? ".cpp" : language === "py" ? ".py" : ".java"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Lines:</span>
+                <span className="text-sm">{code.split("\n").length}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Tips</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="text-xs text-muted-foreground space-y-1">
+                <li>• Use Tab for indentation</li>
+                <li>• Ctrl+A to select all</li>
+                <li>• Test with custom input</li>
+                <li>• Use AI Review for feedback</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   )
 }

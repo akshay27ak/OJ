@@ -19,6 +19,10 @@ import { UpdateProblemPage } from "@/pages/UpdateProblemPage"
 import { SolveProblemPage } from "@/pages/SolveProblemPage"
 import { ExploreProblemsPage } from "@/pages/ExploreProblemsPage"
 import { ProfilePage } from "@/pages/ProfilePage"
+import { ContestsPage } from "@/pages/ContestsPage"
+import { SubmissionsPage } from "@/pages/SubmissionsPage"
+import { StatisticsPage } from "@/pages/StatisticsPage"
+import { SettingsPage } from "@/pages/SettingsPage"
 import NotFound from "@/pages/NotFound"
 
 import { Heartbeat } from "@/components/Heartbeat"
@@ -93,6 +97,38 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contests"
+                element={
+                  <ProtectedRoute>
+                    <ContestsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/submissions"
+                element={
+                  <ProtectedRoute>
+                    <SubmissionsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/statistics"
+                element={
+                  <ProtectedRoute>
+                    <StatisticsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <SettingsPage />
                   </ProtectedRoute>
                 }
               />

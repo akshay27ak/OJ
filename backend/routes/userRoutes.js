@@ -1,40 +1,75 @@
-const express = require("express");
-const router = express.Router();
-const authMiddleware = require("../middleware/auth");
-const User = require("../models/User");
+const express = require("express")
+const router = express.Router()
+const authMiddleware = require("../middleware/auth")
+const User = require("../models/User")
+const bcrypt = require("bcryptjs")
 
 // ✅ POST /api/user/heartbeat - Track 1 minute of time spent today
 router.post("/heartbeat", authMiddleware, async (req, res) => {
   try {
-    const user = req.user;
-    const today = new Date().toISOString().split("T")[0];
-    const currentMinutes = user.timeSpent.get(today) || 0;
+    const user = req.user
+    const today = new Date().toISOString().split("T")[0]
+    const currentMinutes = user.timeSpent.get(today) || 0
 
-    user.timeSpent.set(today, currentMinutes + 1);
-    await user.save();
+    user.timeSpent.set(today, currentMinutes + 1)
+    await user.save()
 
-    res.status(200).json({ success: true, message: "Heartbeat recorded." });
+    res.status(200).json({ success: true, message: "Heartbeat recorded." })
   } catch (error) {
-    console.error("Heartbeat error:", error);
-    res.status(500).json({ error: "Failed to record heartbeat" });
+    console.error("Heartbeat error:", error)
+    res.status(500).json({ error: "Failed to record heartbeat" })
   }
-});
+})
 
 // ✅ GET /api/user/me - Return profile & timeSpent
 router.get("/me", authMiddleware, async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.user
 
     res.status(200).json({
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
       timeSpent: Object.fromEntries(user.timeSpent || []), // convert Map to plain object
-    });
+    })
   } catch (error) {
-    console.error("Fetch profile error:", error);
-    res.status(500).json({ error: "Failed to fetch user data" });
+    console.error("Fetch profile error:", error)
+    res.status(500).json({ error: "Failed to fetch user data" })
   }
-});
+})
 
-module.exports = router;
+// ✅ POST /api/user/change-password - Change user password
+router.post("/change-password", authMiddleware, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: "Both current and new passwords are required" })
+    }
+
+    const user = await User.findById(req.user._id)
+    if (!user) {
+      return res.status(404).json({ error: "User not found" })
+    }
+
+    // Verify current password
+    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password)
+    if (!isCurrentPasswordValid) {
+      return res.status(400).json({ error: "Current password is incorrect" })
+    }
+
+    // Hash new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10)
+
+    // Update password
+    user.password = hashedNewPassword
+    await user.save()
+
+    res.status(200).json({ message: "Password changed successfully" })
+  } catch (error) {
+    console.error("Change password error:", error)
+    res.status(500).json({ error: "Failed to change password" })
+  }
+})
+
+module.exports = router
