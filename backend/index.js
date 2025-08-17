@@ -12,7 +12,7 @@ dotenv.config()
 
 // ✅ CORS Configuration
 const corsOptions = {
-  origin: ["http://localhost:8080", "https://oj-kappa.vercel.app/"], // local + deployed
+  origin: ["http://localhost:8080", "https://oj-kappa.vercel.app"], // local + deployed
   credentials: true,
 }
 

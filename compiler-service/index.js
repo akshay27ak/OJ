@@ -10,8 +10,8 @@ const PORT = process.env.PORT || 8080
 // ✅ CORS setup for both local dev and production
 const allowedOrigins = [
   "http://localhost:8080", // local frontend
-  "https://oj-kappa.vercel.app/", // Updated for new app name
-  "https://oj-nivt.onrender.com/", // Add your Render backend URL
+  "https://oj-kappa.vercel.app", // Updated for new app name
+  "https://oj-nivt.onrender.com", // Add your Render backend URL
 ]
 
 app.use(
