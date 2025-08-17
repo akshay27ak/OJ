@@ -115,6 +115,9 @@ export const SolveProblemPage = () => {
     let allPassed = true
     let failedCase = null
     let verdict = "Accepted"
+    let executionTime = 0
+
+    const startTime = Date.now()
 
     for (const testCase of problem.testCases) {
       try {
@@ -131,14 +134,31 @@ export const SolveProblemPage = () => {
 
         const data = await res.json()
 
-        if (!data.success || !data.isCorrect) {
+        if (!data.success) {
           allPassed = false
+          if (data.error?.includes("Compilation Error")) {
+            verdict = "Compilation Error"
+          } else if (data.error?.includes("Runtime Error")) {
+            verdict = "Runtime Error"
+          } else if (data.error?.includes("Time Limit Exceeded")) {
+            verdict = "Time Limit Exceeded"
+          } else {
+            verdict = "Runtime Error"
+          }
           failedCase = {
             ...testCase,
             actual: data.actualOutput || "",
             error: data.error || data.stderr,
           }
-          verdict = failedCase.error ? "Compilation Error" : "Wrong Answer"
+          break
+        } else if (!data.isCorrect) {
+          allPassed = false
+          verdict = "Wrong Answer"
+          failedCase = {
+            ...testCase,
+            actual: data.actualOutput || "",
+            error: data.error || "",
+          }
           break
         }
       } catch {
@@ -147,6 +167,8 @@ export const SolveProblemPage = () => {
         return
       }
     }
+
+    executionTime = Date.now() - startTime
 
     if (token) {
       try {
@@ -161,8 +183,8 @@ export const SolveProblemPage = () => {
             code,
             language,
             verdict,
-            executionTime: 0, // TODO: Calculate actual execution time
-            memoryUsed: 0, // TODO: Calculate actual memory usage
+            executionTime,
+            memoryUsed: 0, // Memory calculation would require system-level monitoring
           }),
         })
       } catch (error) {
@@ -174,13 +196,15 @@ export const SolveProblemPage = () => {
       toast({ title: "Accepted!", description: "All test cases passed!" })
       setOutput("✅ All test cases passed! Solution accepted.")
     } else {
-      toast({ title: "Wrong Answer", variant: "destructive" })
-      if (failedCase?.error) {
-        setOutput(`❌ Compilation Error (${language.toUpperCase()}):\n${failedCase.error}`)
-      } else if (failedCase) {
+      toast({ title: verdict, variant: "destructive" })
+      if (verdict === "Compilation Error") {
+        setOutput(`❌ ${verdict}:\n${failedCase?.error}`)
+      } else if (verdict === "Wrong Answer") {
         setOutput(
-          `❌ Output mismatch\n\nInput:\n${failedCase.input}\n\nExpected Output:\n${failedCase.expectedOutput}\n\nYour Output:\n${failedCase.actual}`,
+          `❌ ${verdict}\n\nInput:\n${failedCase?.input}\n\nExpected Output:\n${failedCase?.expectedOutput}\n\nYour Output:\n${failedCase?.actual}`,
         )
+      } else {
+        setOutput(`❌ ${verdict}:\n${failedCase?.error}`)
       }
     }
 

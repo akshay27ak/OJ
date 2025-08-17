@@ -5,8 +5,10 @@ import { useAuth } from "@/contexts/AuthContext"
 import { Sidebar } from "@/components/Sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Code2, Clock, Calendar } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Code2, Clock, Calendar, Eye } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
@@ -154,23 +156,54 @@ export const SubmissionsPage = () => {
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          {formatDate(submission.submittedAt)}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            {formatDate(submission.submittedAt)}
+                          </div>
+                          {submission.executionTime > 0 && (
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              {submission.executionTime}ms
+                            </div>
+                          )}
+                          {submission.memoryUsed > 0 && (
+                            <div className="flex items-center gap-1">
+                              <Code2 className="w-4 h-4" />
+                              {submission.memoryUsed}KB
+                            </div>
+                          )}
                         </div>
-                        {submission.executionTime > 0 && (
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            {submission.executionTime}ms
-                          </div>
-                        )}
-                        {submission.memoryUsed > 0 && (
-                          <div className="flex items-center gap-1">
-                            <Code2 className="w-4 h-4" />
-                            {submission.memoryUsed}KB
-                          </div>
-                        )}
+
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Eye className="w-4 h-4 mr-2" />
+                              View Code
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle>
+                                {submission.problemId.title} - {submission.language.toUpperCase()}
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div className="flex items-center gap-2">
+                                <Badge className={getVerdictColor(submission.verdict)} variant="outline">
+                                  {submission.verdict}
+                                </Badge>
+                                <span className="text-sm text-muted-foreground">
+                                  Submitted on {formatDate(submission.submittedAt)}
+                                </span>
+                              </div>
+                              <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm font-mono">
+                                <code>{submission.code}</code>
+                              </pre>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </CardContent>
                   </Card>
