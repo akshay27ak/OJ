@@ -31,7 +31,7 @@ export const LandingPage = () => {
       await login(email, password)
       toast({
         title: "Welcome back!",
-        description: "Successfully signed in to AlgoUniv.",
+        description: "Successfully signed in to Verdiq.",
       })
       navigate("/dashboard")
     } catch (error) {
@@ -60,8 +60,8 @@ export const LandingPage = () => {
               <Code2 className="w-6 h-6 text-primary-foreground" />
             </div>
             <span className="text-2xl font-bold">
-              <span className="text-foreground">Algo</span>
-              <span className="text-primary">Univ</span>
+              <span className="text-foreground">Ver</span>
+              <span className="text-primary">diq</span>
             </span>
           </div>
           <nav className="hidden md:flex items-center space-x-6">
@@ -89,12 +89,11 @@ export const LandingPage = () => {
         <div className="container mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <div className="text-center lg:text-left space-y-6">
             <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight">
-              Master Competitive
-              <span className="text-primary block">Programming</span>
+              Every expert was once
+              <span className="text-primary block">a beginner</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-              Solve challenging problems, compete with others, and improve your coding skills with our comprehensive
-              online judge platform.
+              Start solving, keep learning, and become the coder you want to be.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link to="/signup">
@@ -156,7 +155,7 @@ export const LandingPage = () => {
                   </Button>
                 </form>
                 <div className="mt-4 text-center text-sm text-muted-foreground">
-                  New to AlgoUniv?{" "}
+                  New to Verdiq?{" "}
                   <Link to="/signup" className="text-primary hover:underline font-medium">
                     Create an account
                   </Link>
@@ -170,22 +169,22 @@ export const LandingPage = () => {
       {/* About Section */}
       <section id="about" className="py-20 px-6 bg-muted/50">
         <div className="container mx-auto max-w-4xl text-center space-y-8">
-          <h2 className="text-4xl font-bold text-foreground">About AlgoUniv</h2>
+          <h2 className="text-4xl font-bold text-foreground">About Verdiq</h2>
           <div className="text-lg text-muted-foreground space-y-6 leading-relaxed">
             <p>
-              Welcome to <span className="text-primary font-semibold">AlgoUniv</span> — your comprehensive platform for
+              Welcome to <span className="text-primary font-semibold">Verdiq</span> — your comprehensive platform for
               mastering competitive programming and algorithmic thinking.
             </p>
             <p>
               Whether you're preparing for coding interviews, participating in programming contests, or simply looking
-              to improve your problem-solving skills, AlgoUniv provides the tools and challenges you need to succeed.
+              to improve your problem-solving skills, Verdiq provides the tools and challenges you need to succeed.
             </p>
             <p>
               Our platform features an extensive collection of problems across all difficulty levels, real-time code
               execution, detailed analytics, and a supportive community of fellow programmers.
             </p>
             <p className="text-primary font-semibold text-xl">
-              Join thousands of developers who are already improving their skills with AlgoUniv.
+              Join thousands of developers who are already improving their skills with Verdiq.
             </p>
           </div>
         </div>
@@ -194,7 +193,7 @@ export const LandingPage = () => {
       {/* Features Section */}
       <section className="py-20 px-6">
         <div className="container mx-auto text-center mb-16 space-y-4">
-          <h2 className="text-4xl font-bold text-foreground">Why Choose AlgoUniv?</h2>
+          <h2 className="text-4xl font-bold text-foreground">Why Choose Verdiq?</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Everything you need to excel in competitive programming and technical interviews.
           </p>
@@ -245,13 +244,13 @@ export const LandingPage = () => {
               <Code2 className="w-5 h-5 text-primary-foreground" />
             </div>
             <div className="text-xl font-bold">
-              <span className="text-foreground">Algo</span>
-              <span className="text-primary">Univ</span>
+              <span className="text-foreground">Ver</span>
+              <span className="text-primary">diq</span>
             </div>
           </div>
           <div className="text-muted-foreground flex items-center space-x-2">
             <Star className="w-4 h-4" />
-            <span>© 2024 AlgoUniv. Empowering coders worldwide.</span>
+            <span>© 2024 Verdiq. Empowering coders worldwide.</span>
           </div>
         </div>
       </footer>

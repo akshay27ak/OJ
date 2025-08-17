@@ -11,8 +11,8 @@ export const Footer = () => {
                 <Code2 className="w-5 h-5 text-primary-foreground" />
               </div>
               <div className="text-xl font-bold">
-                <span className="text-foreground">Algo</span>
-                <span className="text-primary">Univ</span>
+                <span className="text-foreground">Ver</span>
+                <span className="text-primary">diq</span>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -89,7 +89,7 @@ export const Footer = () => {
         </div>
 
         <div className="border-t border-border mt-8 pt-8 text-center">
-          <p className="text-sm text-muted-foreground">© 2024 AlgoUniv. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© 2024 Verdiq. All rights reserved.</p>
         </div>
       </div>
     </footer>

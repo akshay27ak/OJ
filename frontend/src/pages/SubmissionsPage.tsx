@@ -162,7 +162,7 @@ export const SubmissionsPage = () => {
                             <Calendar className="w-4 h-4" />
                             {formatDate(submission.submittedAt)}
                           </div>
-                          {submission.executionTime > 0 && (
+                          {/* {submission.executionTime > 0 && (
                             <div className="flex items-center gap-1">
                               <Clock className="w-4 h-4" />
                               {submission.executionTime}ms
@@ -173,7 +173,7 @@ export const SubmissionsPage = () => {
                               <Code2 className="w-4 h-4" />
                               {submission.memoryUsed}KB
                             </div>
-                          )}
+                          )} */}
                         </div>
 
                         <Dialog>

@@ -64,7 +64,7 @@ export const LoginPage = () => {
             <Code2 className="w-8 h-8 text-primary-foreground" />
           </div>
           <h1 className="text-3xl font-bold text-foreground">Welcome Back</h1>
-          <p className="text-muted-foreground">Sign in to your AlgoUniv account</p>
+          <p className="text-muted-foreground">Sign in to your Verdiq account</p>
         </div>
 
         <Card className="border-border shadow-lg">

@@ -30,7 +30,7 @@ export const SignupPage = () => {
       await signup(firstname, lastname, email, password)
       toast({
         title: "Registration Successful",
-        description: "Welcome to AlgoUniv! You can now start solving problems.",
+        description: "Welcome to Verdiq! You can now start solving problems.",
       })
       navigate("/dashboard")
     } catch (error) {
@@ -59,7 +59,7 @@ export const SignupPage = () => {
           <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mx-auto shadow-lg">
             <Code2 className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">Join AlgoUniv</h1>
+          <h1 className="text-3xl font-bold text-foreground">Join Verdiq</h1>
           <p className="text-muted-foreground">Create your account and start your coding journey</p>
         </div>
 

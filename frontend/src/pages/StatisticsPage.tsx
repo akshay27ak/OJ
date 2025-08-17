@@ -200,7 +200,7 @@ export const StatisticsPage = () => {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  {/* <Card>
                     <CardHeader className="pb-2">
                       <CardTitle className="text-sm font-medium flex items-center gap-2">
                         <Clock className="w-4 h-4" />
@@ -211,7 +211,7 @@ export const StatisticsPage = () => {
                       <div className="text-2xl font-bold text-purple-600">{stats.averageTime}ms</div>
                       <p className="text-xs text-muted-foreground">Execution time</p>
                     </CardContent>
-                  </Card>
+                  </Card> */}
                 </div>
 
                 {/* Difficulty Progress */}
