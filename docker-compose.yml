@@ -38,18 +38,18 @@ services:
       - DAC_OVERRIDE
 
   # Frontend Service
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - VITE_API_URL=http://localhost:5000
-  #     - VITE_COMPILER_URL=http://localhost:8000
-  #   depends_on:
-  #     - backend
-  #     - compiler
-  #   networks:
-  #     - oj-network
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    environment:
+      - VITE_API_URL=http://localhost:5000
+      - VITE_COMPILER_URL=http://localhost:8000
+    depends_on:
+      - backend
+      - compiler
+    networks:
+      - oj-network
 
 networks:
   oj-network:
