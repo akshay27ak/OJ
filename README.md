@@ -53,7 +53,7 @@ npm run dev
 cd compiler-service
 npm install
 docker build -t oj-compiler .
-docker run -p 8080:8080 oj-compiler
+docker run -p 8000:8000 oj-compiler
 \`\`\`
 
 ### Environment Variables
@@ -68,7 +68,7 @@ PORT=5000
 **Frontend (.env)**
 \`\`\`
 VITE_BACKEND_URL=http://localhost:5000
-VITE_COMPILER_URL=http://localhost:8080
+VITE_COMPILER_URL=http://localhost:8000
 \`\`\`
 
 ## API Documentation
