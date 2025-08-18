@@ -1,41 +1,34 @@
 const express = require("express")
 const app = express()
 const cors = require("cors")
-const dotenv = require("dotenv")
-const { DBConnection } = require("./database/db")
 const User = require("./models/User")
+const { DBConnection } = require("./database/db")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const dotenv = require("dotenv")
 
-// ✅ Load environment variables early
 dotenv.config()
 
-// ✅ CORS Configuration
 const corsOptions = {
-  origin: ["http://localhost:8080", "https://oj-kappa.vercel.app"], // local + deployed
+  origin: ["http://localhost:8080", "https://oj-kappa.vercel.app"], 
   credentials: true,
 }
 
 app.use(cors(corsOptions))
 
-// ✅ Middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// ✅ Connect to MongoDB
 DBConnection()
 
-// ✅ Import routes
 const problemRoutes = require("./routes/problemRoutes")
 const userRoutes = require("./routes/userRoutes")
 const submissionRoutes = require("./routes/submissionRoutes")
 
-// ✅ Test route
 app.get("/", (req, res) => {
   res.send("Hello WORLD !")
 })
 
-// ✅ Register
 app.post("/register", async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body
@@ -49,13 +42,13 @@ app.post("/register", async (req, res) => {
       return res.status(400).send("User already exists with the same email")
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashPass = await bcrypt.hash(password, 10)
 
     const user = await User.create({
       firstname,
       lastname,
       email,
-      password: hashedPassword,
+      password: hashPass,
     })
 
     const token = jwt.sign({ id: user._id, email }, process.env.SECRET_KEY, {
@@ -75,7 +68,7 @@ app.post("/register", async (req, res) => {
   }
 })
 
-// ✅ Login with improved error messages
+
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body
@@ -87,12 +80,12 @@ app.post("/login", async (req, res) => {
     const user = await User.findOne({ email })
 
     if (!user) {
-      return res.status(404).send("User not registered") // User not found message
+      return res.status(404).send("User not registered") 
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if (!isPasswordValid) {
-      return res.status(401).send("Invalid credentials") // Wrong password message
+      return res.status(401).send("Invalid credentials") 
     }
 
     const token = jwt.sign({ id: user._id, email }, process.env.SECRET_KEY, {
@@ -112,20 +105,17 @@ app.post("/login", async (req, res) => {
   }
 })
 
-// ✅ Logout
 app.post("/logout", (req, res) => {
   res.status(200).json({
     message: "Logout successful. Please delete token from client (like localStorage).",
   })
 })
 
-// ✅ Routes
 app.use("/api/problems", problemRoutes)
 app.use("/api/user", userRoutes)
 app.use("/api/submissions", submissionRoutes)
 
-// ✅ Start server
 const PORT = process.env.PORT || 5000
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Verdiq Backend Server is running on port ${PORT}`)
+  console.log(`Verdiq Backend Server is running on port ${PORT}`)
 })

@@ -15,7 +15,7 @@ const generateFile = (language, code) => {
 
   let fileName = `${jobId}.${language}`;
   if (language === "java") {
-    fileName = "Main.java"; // Java class must be named Main
+    fileName = "Main.java"; 
   }
 
   const filePath = path.join(jobDir, fileName);

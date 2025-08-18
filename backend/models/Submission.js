@@ -27,11 +27,11 @@ const submissionSchema = new mongoose.Schema({
   },
   executionTime: {
     type: Number,
-    default: 0, // in milliseconds
+    default: 0, 
   },
   memoryUsed: {
     type: Number,
-    default: 0, // in KB
+    default: 0,
   },
   submittedAt: {
     type: Date,

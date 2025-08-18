@@ -1,10 +1,9 @@
 const express = require("express")
+const authMW = require("../middleware/auth")
 const router = express.Router()
 const Problem = require("../models/Problem")
-const authMiddleware = require("../middleware/auth")
 
-// 🔹 Create Problem
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMW, async (req, res) => {
   try {
     const { title, statement, difficulty, testCases } = req.body
 
@@ -27,7 +26,7 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 })
 
-// 🔹 Get All Problems
+
 router.get("/", async (req, res) => {
   try {
     const { createdBy } = req.query
@@ -45,7 +44,7 @@ router.get("/", async (req, res) => {
   }
 })
 
-// 🔹 Get a Single Problem by ID
+
 router.get("/:id", async (req, res) => {
   try {
     const problem = await Problem.findById(req.params.id).populate("createdBy", "firstname lastname email")
@@ -59,8 +58,8 @@ router.get("/:id", async (req, res) => {
   }
 })
 
-// 🔹 Update Problem (only by creator)
-router.put("/:id", authMiddleware, async (req, res) => {
+
+router.put("/:id", authMW, async (req, res) => {
   try {
     const problem = await Problem.findById(req.params.id)
     if (!problem) return res.status(404).send("Problem not found")
@@ -78,8 +77,8 @@ router.put("/:id", authMiddleware, async (req, res) => {
   }
 })
 
-// 🔹 Delete Problem (only by creator)
-router.delete("/:id", authMiddleware, async (req, res) => {
+
+router.delete("/:id", authMW, async (req, res) => {
   try {
     const problem = await Problem.findById(req.params.id)
     if (!problem) return res.status(404).send("Problem not found")

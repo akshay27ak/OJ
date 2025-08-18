@@ -1,23 +1,21 @@
 const express = require("express")
 const cors = require("cors")
-const generateFile = require("./generateFile")
 const executeCode = require("./executeCode")
 const generateAiResponse = require("./generateAiResponse")
+const generateFile = require("./generateFile")
 
 const app = express()
 const PORT = process.env.PORT || 8000
 
-// ✅ CORS setup for both local dev and production
 const allowedOrigins = [
-  "http://localhost:8080", // local frontend
-  "https://oj-kappa.vercel.app", // Updated for new app name
-  "https://oj-nivt.onrender.com", // Add your Render backend URL
+  "http://localhost:8080", 
+  "https://oj-kappa.vercel.app", 
+  "https://oj-nivt.onrender.com", 
 ]
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin like mobile apps or curl
       if (!origin) return callback(null, true)
       if (allowedOrigins.includes(origin)) {
         return callback(null, true)
@@ -32,12 +30,10 @@ app.use(
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// ✅ Health route
 app.get("/", (req, res) => {
-  res.send("⚙️ Verdiq Compiler Service Running")
+  res.send("Verdiq Compiler Service Running")
 })
 
-// 🔁 Run Code API
 app.post("/run", async (req, res) => {
   const { language = "cpp", code, input = "" } = req.body
 
@@ -59,7 +55,7 @@ app.post("/run", async (req, res) => {
   }
 })
 
-// ✅ Submit API
+
 app.post("/submit", async (req, res) => {
   const { language = "cpp", code, input = "", expectedOutput = "" } = req.body
 
@@ -90,7 +86,6 @@ app.post("/submit", async (req, res) => {
   }
 })
 
-// 🤖 AI Review API
 app.post("/ai-review", async (req, res) => {
   const { code, language = "cpp" } = req.body
 
@@ -111,7 +106,6 @@ app.post("/ai-review", async (req, res) => {
   }
 })
 
-// ✅ Start Server
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Verdiq Compiler server running on port ${PORT}`)
+  console.log(`Verdiq Compiler server running on port ${PORT}`)
 })

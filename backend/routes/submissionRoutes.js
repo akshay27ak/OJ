@@ -1,10 +1,9 @@
 const express = require("express")
+const authMW = require("../middleware/auth")
 const router = express.Router()
 const Submission = require("../models/Submission")
-const authMiddleware = require("../middleware/auth")
 
-// Create a new submission
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMW, async (req, res) => {
   try {
     const { problemId, code, language, verdict, executionTime, memoryUsed } = req.body
 
@@ -29,8 +28,7 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 })
 
-// Get user's submissions
-router.get("/", authMiddleware, async (req, res) => {
+router.get("/", authMW, async (req, res) => {
   try {
     const submissions = await Submission.find({ userId: req.user._id })
       .populate("problemId", "title difficulty")

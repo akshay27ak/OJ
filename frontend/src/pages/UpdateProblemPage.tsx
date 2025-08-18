@@ -104,7 +104,7 @@ export const UpdateProblemPage = () => {
         <div className="absolute bottom-1/3 left-1/2 w-64 h-64 bg-blue-300/20 rounded-full blur-2xl animate-pulse" />
       </div>
 
-      {/* ✅ Absolute "Back to Dashboard" */}
+      {/* Absolute "Back to Dashboard" */}
       <Link
         to="/dashboard"
         className="absolute top-6 left-6 z-30 flex items-center space-x-2 text-black hover:text-purple-600 text-lg font-semibold transition-colors duration-300 group"

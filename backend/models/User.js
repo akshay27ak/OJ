@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // 🔹 Track time spent per day: { "YYYY-MM-DD": minutes }
+  
   timeSpent: {
     type: Map,
     of: Number,

@@ -1,11 +1,11 @@
 const express = require("express")
+const authMW = require("../middleware/auth")
 const router = express.Router()
-const authMiddleware = require("../middleware/auth")
 const User = require("../models/User")
 const bcrypt = require("bcryptjs")
 
-// ✅ POST /api/user/heartbeat - Track 1 minute of time spent today
-router.post("/heartbeat", authMiddleware, async (req, res) => {
+
+router.post("/heartbeat", authMW, async (req, res) => {
   try {
     const user = req.user
     const today = new Date().toISOString().split("T")[0]
@@ -21,8 +21,7 @@ router.post("/heartbeat", authMiddleware, async (req, res) => {
   }
 })
 
-// ✅ GET /api/user/me - Return profile & timeSpent
-router.get("/me", authMiddleware, async (req, res) => {
+router.get("/me", authMW, async (req, res) => {
   try {
     const user = req.user
 
@@ -30,7 +29,7 @@ router.get("/me", authMiddleware, async (req, res) => {
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
-      timeSpent: Object.fromEntries(user.timeSpent || []), // convert Map to plain object
+      timeSpent: Object.fromEntries(user.timeSpent || []), 
     })
   } catch (error) {
     console.error("Fetch profile error:", error)
@@ -38,8 +37,7 @@ router.get("/me", authMiddleware, async (req, res) => {
   }
 })
 
-// ✅ POST /api/user/change-password - Change user password
-router.post("/change-password", authMiddleware, async (req, res) => {
+router.post("/change-password", authMW, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body
 
@@ -52,16 +50,13 @@ router.post("/change-password", authMiddleware, async (req, res) => {
       return res.status(404).json({ error: "User not found" })
     }
 
-    // Verify current password
     const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password)
     if (!isCurrentPasswordValid) {
       return res.status(400).json({ error: "Current password is incorrect" })
     }
 
-    // Hash new password
     const hashedNewPassword = await bcrypt.hash(newPassword, 10)
 
-    // Update password
     user.password = hashedNewPassword
     await user.save()
 

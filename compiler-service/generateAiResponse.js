@@ -24,7 +24,6 @@ const generateAiResponse = async (code) => {
       ],
     });
 
-    // ✅ Proper way to extract text
     const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
 
 

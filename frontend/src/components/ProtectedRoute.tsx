@@ -17,7 +17,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     );
   }
 
-  // 🔒 Check if both user and token are present
+  // Check if both user and token are present
   if (!user || !token) {
     return <Navigate to="/login" replace />;
   }

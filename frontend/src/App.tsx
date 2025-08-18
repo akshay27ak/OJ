@@ -29,7 +29,6 @@ import { Heartbeat } from "@/components/Heartbeat"
 
 const queryClient = new QueryClient()
 
-// ✅ Layout wrapper to conditionally show Navbar
 const LayoutWithNavbar = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation()
   const noNavbarRoutes = ["/", "/login", "/signup"]
@@ -53,13 +52,13 @@ const App = () => (
         <Router>
           <LayoutWithNavbar>
             <Routes>
-              {/* 🌐 Public Routes */}
+              {/* Public Routes */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/problems" element={<ExploreProblemsPage />} />
 
-              {/* 🔒 Protected Routes */}
+              {/* Protected Routes */}
               <Route
                 path="/dashboard"
                 element={
