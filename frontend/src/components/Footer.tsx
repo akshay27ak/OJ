@@ -89,7 +89,7 @@ export const Footer = () => {
         </div>
 
         <div className="border-t border-border mt-8 pt-8 text-center">
-          <p className="text-sm text-muted-foreground">© 2024 Verdiq. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© 2025 Verdiq. All rights reserved.</p>
         </div>
       </div>
     </footer>
