@@ -128,6 +128,3 @@ VITE_COMPILER_URL=http://localhost:8000
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support
-
-For support, email support@onlinejudge.com or join our Discord community.
