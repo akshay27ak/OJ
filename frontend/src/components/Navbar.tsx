@@ -32,8 +32,8 @@ export const Navbar = () => {
               <Code2 className="w-6 h-6 text-primary-foreground" />
             </div>
             <div className="text-2xl font-bold">
-              <span className="text-foreground">Algo</span>
-              <span className="text-primary">Univ</span>
+              <span className="text-foreground">Ver</span>
+              <span className="text-primary">diq</span>
             </div>
           </div>
 

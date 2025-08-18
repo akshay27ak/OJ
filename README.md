@@ -1,4 +1,4 @@
-# Online Judge Platform
+# Online Judge Platform - Verdiq
 
 A competitive programming platform for coding challenges with automated evaluation and real-time feedback.
 
