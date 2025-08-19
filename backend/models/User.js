@@ -24,15 +24,6 @@ const userSchema = new mongoose.Schema({
     of: Number,
     default: {},
   },
-
-  activityLog: [
-    {
-      action: { type: String }, // e.g. "login", "logout", "viewPage"
-      timestamp: { type: Date, default: Date.now }, // stored in UTC
-      timezone: { type: String }, // optional, e.g. "America/New_York"
-      ip: { type: String }, // store IP address
-    },
-  ],
 });
 
 module.exports = mongoose.model("User", userSchema);
