@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { Sidebar } from "@/components/Sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BarChart3, TrendingUp, Clock, Award, Code2, Target, Calendar } from "lucide-react"
+import { BarChart3, TrendingUp, Award, Code2, Target, Calendar } from "lucide-react"
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
@@ -15,7 +15,7 @@ interface Submission {
     _id: string
     title: string
     difficulty: string
-  }
+  } | null
   language: string
   verdict: string
   executionTime: number
@@ -57,7 +57,9 @@ export const StatisticsPage = () => {
   const stats = {
     totalSubmissions: submissions.length,
     acceptedSubmissions: submissions.filter((s) => s.verdict === "Accepted").length,
-    solvedProblems: new Set(submissions.filter((s) => s.verdict === "Accepted").map((s) => s.problemId._id)).size,
+    solvedProblems: new Set(
+      submissions.filter((s) => s.verdict === "Accepted" && s.problemId !== null).map((s) => s.problemId._id),
+    ).size,
     languages: [...new Set(submissions.map((s) => s.language))],
     averageTime:
       submissions.length > 0
@@ -66,9 +68,15 @@ export const StatisticsPage = () => {
   }
 
   const difficultyStats = {
-    Easy: submissions.filter((s) => s.problemId.difficulty === "Easy" && s.verdict === "Accepted").length,
-    Medium: submissions.filter((s) => s.problemId.difficulty === "Medium" && s.verdict === "Accepted").length,
-    Hard: submissions.filter((s) => s.problemId.difficulty === "Hard" && s.verdict === "Accepted").length,
+    Easy: submissions.filter(
+      (s) => s.problemId !== null && s.problemId.difficulty === "Easy" && s.verdict === "Accepted",
+    ).length,
+    Medium: submissions.filter(
+      (s) => s.problemId !== null && s.problemId.difficulty === "Medium" && s.verdict === "Accepted",
+    ).length,
+    Hard: submissions.filter(
+      (s) => s.problemId !== null && s.problemId.difficulty === "Hard" && s.verdict === "Accepted",
+    ).length,
   }
 
   const languageStats = stats.languages.map((lang) => ({
@@ -287,20 +295,29 @@ export const StatisticsPage = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {recentActivity.map((submission) => (
-                        <div key={submission._id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <Badge className={getVerdictColor(submission.verdict)} variant="outline">
-                              {submission.verdict}
-                            </Badge>
-                            <span className="font-medium">{submission.problemId.title}</span>
-                            <Badge variant="outline">{submission.language.toUpperCase()}</Badge>
-                          </div>
-                          <span className="text-sm text-muted-foreground">
-                            {new Date(submission.submittedAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                      ))}
+                      {recentActivity.filter((submission) => submission.problemId !== null).length === 0 ? (
+                        <p className="text-muted-foreground text-center py-4">No recent activity available</p>
+                      ) : (
+                        recentActivity
+                          .filter((submission) => submission.problemId !== null)
+                          .map((submission) => (
+                            <div
+                              key={submission._id}
+                              className="flex items-center justify-between p-3 bg-muted rounded-lg"
+                            >
+                              <div className="flex items-center gap-3">
+                                <Badge className={getVerdictColor(submission.verdict)} variant="outline">
+                                  {submission.verdict}
+                                </Badge>
+                                <span className="font-medium">{submission.problemId.title}</span>
+                                <Badge variant="outline">{submission.language.toUpperCase()}</Badge>
+                              </div>
+                              <span className="text-sm text-muted-foreground">
+                                {new Date(submission.submittedAt).toLocaleDateString()}
+                              </span>
+                            </div>
+                          ))
+                      )}
                     </div>
                   </CardContent>
                 </Card>

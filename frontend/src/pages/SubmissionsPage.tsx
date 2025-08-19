@@ -6,7 +6,7 @@ import { Sidebar } from "@/components/Sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Code2, Clock, Calendar, Eye } from "lucide-react"
+import { Code2, Calendar, Eye } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
@@ -18,7 +18,7 @@ interface Submission {
     _id: string
     title: string
     difficulty: string
-  }
+  } | null
   code: string
   language: string
   verdict: "Accepted" | "Wrong Answer" | "Compilation Error" | "Runtime Error"
@@ -125,90 +125,88 @@ export const SubmissionsPage = () => {
                   </Card>
                 ))}
               </div>
-            ) : submissions.length === 0 ? (
+            ) : submissions.filter((submission) => submission.problemId !== null).length === 0 ? (
               <Card className="text-center py-12">
                 <CardContent>
                   <Code2 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground text-lg">No submissions yet</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Start solving problems to see your submissions here!
-                  </p>
+                  <p className="text-muted-foreground text-lg">No valid submissions found</p>
+                  <p className="text-sm text-muted-foreground mt-2">Some submissions may reference deleted problems.</p>
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-4">
-                {submissions.map((submission) => (
-                  <Card key={submission._id} className="hover:shadow-md transition-shadow">
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <CardTitle className="text-lg">{submission.problemId.title}</CardTitle>
-                          <div className="flex items-center gap-2 mt-2">
-                            <Badge className={getDifficultyColor(submission.problemId.difficulty)} variant="outline">
-                              {submission.problemId.difficulty}
-                            </Badge>
-                            <Badge variant="outline">{submission.language.toUpperCase()}</Badge>
-                          </div>
-                        </div>
-                        <Badge className={getVerdictColor(submission.verdict)} variant="outline">
-                          {submission.verdict}
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
-                            {formatDate(submission.submittedAt)}
-                          </div>
-                          {/* {submission.executionTime > 0 && (
-                            <div className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              {submission.executionTime}ms
-                            </div>
-                          )}
-                          {submission.memoryUsed > 0 && (
-                            <div className="flex items-center gap-1">
-                              <Code2 className="w-4 h-4" />
-                              {submission.memoryUsed}KB
-                            </div>
-                          )} */}
-                        </div>
-
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" size="sm">
-                              <Eye className="w-4 h-4 mr-2" />
-                              View Code
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                            <DialogHeader>
-                              <DialogTitle>
-                                {submission.problemId.title} - {submission.language.toUpperCase()}
-                              </DialogTitle>
-                            </DialogHeader>
-                            <div className="space-y-4">
-                              <div className="flex items-center gap-2">
-                                <Badge className={getVerdictColor(submission.verdict)} variant="outline">
-                                  {submission.verdict}
-                                </Badge>
-                                <span className="text-sm text-muted-foreground">
-                                  Submitted on {formatDate(submission.submittedAt)}
-                                </span>
-                              </div>
-                              <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm font-mono">
-                                <code>{submission.code}</code>
-                              </pre>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
-                      </div>
+              <>
+                {submissions.filter((submission) => submission.problemId === null).length > 0 && (
+                  <Card className="border-orange-200 bg-orange-50">
+                    <CardContent className="pt-6">
+                      <p className="text-orange-800 text-sm">
+                        ⚠️ {submissions.filter((submission) => submission.problemId === null).length} submission(s)
+                        reference deleted problems and are not displayed.
+                      </p>
                     </CardContent>
                   </Card>
-                ))}
-              </div>
+                )}
+                {submissions
+                  .filter((submission) => submission.problemId !== null)
+                  .map((submission) => (
+                    <Card key={submission._id} className="hover:shadow-md transition-shadow">
+                      <CardHeader>
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <CardTitle className="text-lg">{submission.problemId.title}</CardTitle>
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge className={getDifficultyColor(submission.problemId.difficulty)} variant="outline">
+                                {submission.problemId.difficulty}
+                              </Badge>
+                              <Badge variant="outline">{submission.language.toUpperCase()}</Badge>
+                            </div>
+                          </div>
+                          <Badge className={getVerdictColor(submission.verdict)} variant="outline">
+                            {submission.verdict}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              {formatDate(submission.submittedAt)}
+                            </div>
+                          </div>
+
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm">
+                                <Eye className="w-4 h-4 mr-2" />
+                                View Code
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {submission.problemId.title} - {submission.language.toUpperCase()}
+                                </DialogTitle>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                  <Badge className={getVerdictColor(submission.verdict)} variant="outline">
+                                    {submission.verdict}
+                                  </Badge>
+                                  <span className="text-sm text-muted-foreground">
+                                    Submitted on {formatDate(submission.submittedAt)}
+                                  </span>
+                                </div>
+                                <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm font-mono">
+                                  <code>{submission.code}</code>
+                                </pre>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </>
             )}
           </div>
         </div>

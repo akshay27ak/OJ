@@ -11,7 +11,7 @@
       "image": "427835583093.dkr.ecr.us-east-1.amazonaws.com/oj-compiler:latest",
       "portMappings": [
         {
-          "containerPort": 8080,
+          "containerPort": 8000,
           "protocol": "tcp"
         }
       ],
@@ -27,7 +27,7 @@
       "environment": [
         {
           "name": "PORT",
-          "value": "8080"
+          "value": "8000"
         }
       ]
     }

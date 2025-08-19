@@ -52,7 +52,7 @@ app.post("/register", async (req, res) => {
     })
 
     const token = jwt.sign({ id: user._id, email }, process.env.SECRET_KEY, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     })
 
     user.password = undefined
@@ -89,7 +89,7 @@ app.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id, email }, process.env.SECRET_KEY, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     })
 
     user.password = undefined
