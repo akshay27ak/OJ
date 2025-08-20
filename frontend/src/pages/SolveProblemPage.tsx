@@ -184,7 +184,7 @@ export const SolveProblemPage = () => {
             language,
             verdict,
             executionTime,
-            memoryUsed: 0, // Memory calculation would require system-level monitoring
+            memoryUsed: 0, 
           }),
         })
       } catch (error) {
